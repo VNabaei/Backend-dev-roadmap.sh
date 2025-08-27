@@ -1,0 +1,18 @@
+import os
+
+#region : Constants and variable 
+
+#path of app : 
+BASE_DIR = os.getcwd()
+APP_FOLDER = os.path.join(BASE_DIR,"Todolists app")
+TABLE_LIST = os.path.join(APP_FOLDER,"Table_List.csv")
+
+# filesds in Task and List :
+FIELDS_TASKS = ['Id','Title','Descreaption','DeadLine','Task_Status', 'Create_at','Edited_by','File_status'] 
+FIELDS_TABLE = ['Id','Title','Creator','Created_at','File_status','Path']
+
+#Status in file status ana task :
+FILE_STATUS = ['Created','Edited','Deleted']
+TASK_STATUS = ['Done','Todo','In_progress','Deleyed']
+
+#endregion
