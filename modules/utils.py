@@ -1,6 +1,79 @@
 from datetime import datetime,date
+import os
 import getpass
 import storage
+from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TABLE,FILE_STATUS
+
+#region : the functions in FileModule.py
+# -------------------------------------------------------------
+#Folder Handeller :
+def Add_List_in_Table_list(todolist_title):
+    try :
+            reader = storage.read_csv(TABLE_LIST_PATH)
+            
+            data = [
+                {
+                    'Id':datetime.today().strftime("%Y%m%d%H%M%S")
+                    ,'Title' : todolist_title
+                    ,'Creator' : Get_User()
+                    ,'Created_at' : datetime.today()
+                    ,'File_status' : FILE_STATUS[0]
+                    ,'Path' : TABLE_LIST_PATH #INFO : We need this to check the to do list ID
+                }
+            ]
+            reader.extend(data)
+    except ValueError as error :
+        print(f"The operation to create the lists table failed. Error: {error}\n")
+        
+    try :  
+        storage.totalwrite_csv(TABLE_LIST_PATH,FIELDS_TABLE,reader)  
+
+    except ValueError as error :
+        print("error in csv file : dict contains fields not in fieldnames")
+        
+        
+# -------------------------------------------------------------
+# FolderCreator :
+def Foulder_of_ToDoList_Creator (todolist_title):
+        os.makedirs(APP_FOLDER_PATH)
+         #INFO : creat path 
+        #INFO : Create a table containing list information    
+        data = [
+            {
+                'Id':datetime.today().strftime("%Y%m%d%H%M%S")
+                ,'Title' : todolist_title
+                ,'Creator' : Get_User()
+                ,'Created_at' : datetime.today()
+                ,'File_status' : FILE_STATUS[0]
+                ,'Path' : os.path.join(APP_FOLDER_PATH,f"{todolist_title}.csv") #INFO : We need this to check the to do list ID
+            }
+         ]
+        try : 
+            storage.totalwrite_csv(TABLE_LIST_PATH,FIELDS_TABLE,data)
+        except ValueError as error:
+            print(f"The operation to create the Folder of todo lists failed. Error: {error}\n")
+            
+
+#endregion    
+
+
+def Get_User():
+    '''
+    Getting User from operation system
+    
+    Parametr(s):
+    ------------
+    None
+    
+    Return(s):
+    ----------
+    user or Unknown :str
+    '''
+    try:
+        user = getpass.getuser()
+        return user
+    except Exception:
+        return "Unknown"
 
 def Deadline_Creator():
     '''
@@ -95,20 +168,58 @@ def Editor():
     '''
     return Get_User()
 
-def Get_User():
-    '''
-    Getting User from operation system
+def task_deadline_status(deadline_str):
+    """
+    Returns the status of a task based on its deadline.
     
-    Parametr(s):
-    ------------
-    None
-    
-    Return(s):
-    ----------
-    user or Unknown :str
-    '''
+    Parameters:
+    -----------
+    deadline_str : str
+        Deadline in 'YYYY/MM/DD' format
+
+    Returns:
+    --------
+    str : "Active", "Due Today", or "Expired"
+    """
     try:
-        user = getpass.getuser()
-        return user
+        deadline_date = datetime.strptime(deadline_str, "%Y/%m/%d").date()
+        today = datetime.today().date()
+        if deadline_date < today:
+            return "Expired"
+        elif deadline_date == today:
+            return "Due Today"
+        else:
+            return "Active"
     except Exception:
-        return "Unknown"
+        return "Unknown situation in deadline calculate"
+
+
+def check_deadline_status(deadline_str: str) -> str:
+    """
+    Checks the status of a task based on its deadline.
+    Accepts 'M/D/YYYY', 'MM/DD/YYYY', 'YYYY/MM/DD', or 'YYYY-M-D' formats.
+
+    Returns: "Expired", "Due Today", "Active", or "Invalid Format"
+    """
+    if not deadline_str or deadline_str.strip() == "":
+        return "Invalid Format"
+
+    # لیست فرمت‌های ممکن
+    possible_formats = ["%m/%d/%Y", "%Y/%m/%d", "%Y-%m-%d"]
+
+    for fmt in possible_formats:
+        try:
+            deadline_date = datetime.strptime(deadline_str.strip(), fmt).date()
+            today = datetime.today().date()
+
+            if deadline_date < today:
+                return "Expired"
+            elif deadline_date == today:
+                return "Due Today"
+            else:
+                return "Active"
+        except ValueError:
+            continue
+
+    return "Invalid Format"                
+#endregion   

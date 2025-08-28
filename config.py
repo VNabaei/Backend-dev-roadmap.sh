@@ -3,9 +3,9 @@ import os
 #region : Constants and variable 
 
 #path of app : 
-BASE_DIR = os.getcwd()
-APP_FOLDER = os.path.join(BASE_DIR,"Todolists app")
-TABLE_LIST = os.path.join(APP_FOLDER,"Table_List.csv")
+BASE_DIR_PATH = os.getcwd()
+APP_FOLDER_PATH = os.path.join(BASE_DIR_PATH,"Todolists app")
+TABLE_LIST_PATH = os.path.join(APP_FOLDER_PATH,"Table_List.csv")
 
 # filesds in Task and List :
 FIELDS_TASKS = ['Id','Title','Descreaption','DeadLine','Task_Status', 'Create_at','Edited_by','File_status'] 

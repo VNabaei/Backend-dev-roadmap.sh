@@ -28,7 +28,7 @@ def add_task(file_path,todolist_id):
     storage.write_csv(file_path,FIELDS_TASKS,tasks)
     print(f"task(s) saved in {file_path} successfully")
     
-def null_todolist_creator(FIELDS_TASKS,file_path):
+def null_todolist_creator(file_path):
     
     storage.totalwrite_csv(file_path,FIELDS_TASKS)
 
