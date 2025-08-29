@@ -222,4 +222,41 @@ def check_deadline_status(deadline_str: str) -> str:
             continue
 
     return "Invalid Format"                
+
+def colored_progress_bar(percent: float, length: int = 30) -> str:
+    """
+    This function displays a colored progress bar in proportion to the percentage of progress.
+     
+    Parameter(s):
+    -----------
+    percent : float
+        درصد پیشرفت (۰ تا ۱۰۰)
+    length : int
+        طول نوار پیشرفت (پیش‌فرض ۳۰ کاراکتر)
+
+    Return(s):
+    --------
+    str : نوار پیشرفت رنگی همراه با درصد
+    """
+
+    # محدود کردن درصد بین 0 و 100
+    percent = max(0, min(100, percent))
+
+    # محاسبه‌ی بلوک‌های پر و خالی
+    filled_length = int(length * percent // 100)
+    empty_length = length - filled_length
+
+    # انتخاب رنگ با ANSI escape codes
+    if percent < 40:
+        color = "\033[91m"   # قرمز
+    elif percent < 80:
+        color = "\033[93m"   # زرد
+    else:
+        color = "\033[92m"   # سبز
+
+    reset = "\033[0m"
+    bar = f"{color}{'█' * filled_length}{reset}{'-' * empty_length}"
+
+    return f"[{bar}] {percent}%"
+
 #endregion   
