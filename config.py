@@ -15,4 +15,9 @@ FIELDS_TABLE = ['Id','Title','Creator','Created_at','File_status','Path']
 FILE_STATUS = ['Created','Edited','Deleted']
 TASK_STATUS = ['Done','Todo','In_progress','Deleyed']
 
+# color :
+WARNING_COLOR = "\033[91m" 
+ATTENTION_COLOR = "\033[93m"
+RESET_COLOR = "\033[0m"
+
 #endregion

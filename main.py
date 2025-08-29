@@ -1,11 +1,6 @@
-import Lists_Task
-import FileModule
-#region : variable
-WarningColor = "\033[91m" 
-AtentionColor = "\033[93m"
-resetColor = "\033[0m"
+from modules import lists,tasks,utils,storage
+from config import WARNING_COLOR,ATTENTION_COLOR,RESET_COLOR,TABLE_LIST_PATH
 
-#endregion
 
 #region : operation function:
 
@@ -23,17 +18,17 @@ def Show2Select():
             String containing the path value of the desired list. 
         '''
         print("select the title of the lists : \n")
-        FileModule.show_All_lists()
+        lists.show_All_lists()
         Target_list = input("input the title: \n")
         try :
-            path_of_list = FileModule.getPath(Target_list)
-            FileModule.Show_List(path_of_list)
+            path_of_list = utils.getPath(Target_list)
+            lists.Show_List(path_of_list)
             
             print("all task(s) :\n")
-            FileModule.Show_List_ALLTask(path_of_list)
+            lists.Show_List_ALLTask(path_of_list)
             return path_of_list
         except Exception as error:
-            print(f"{WarningColor} Error : list not found.\n detail:({error}){resetColor}")
+            print(f"{WARNING_COLOR} Error : list not found.\n detail:({error}){RESET_COLOR}")
             return None
 
 #endregion
@@ -63,14 +58,14 @@ def edit_menu():
         if edit_choice == "1":
             print("----\nadd task(s) -------------------------\n ")
             print("for adding, do this steps :\n")
-            FileModule.show_All_lists()
+            lists.show_All_lists()
             
             Target_list= input("Which list do you want to add task(s)? ")
             try :
-                todo_list_path = FileModule.getPath(Target_list)  
-                FileModule.Add_Task(todo_list_path ,FileModule.getId(Target_list))
+                todo_list_path = utils.getPath(Target_list)  
+                tasks.add_task(todo_list_path ,utils.getId(Target_list))
             except Exception :
-                print(f"{AtentionColor}Something is wrong with the input variable. Erorr :{resetColor}")
+                print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
             
         elif edit_choice == "2":
             print("----\nEdit a task -------------------------\n ")
@@ -79,10 +74,10 @@ def edit_menu():
             if path_of_list :
                 ETask = input("Enter the Title of the task to edit: ")
                 try :
-                    task_path = FileModule.getPath(ETask)
-                    FileModule.Edit_Task(path_of_list,ETask)
+                    
+                    tasks.Edit_Task(path_of_list,ETask)
                 except Exception :
-                    print(f"{AtentionColor}Something is wrong with the input variable. Erorr :{resetColor}")
+                    print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
                     
                 # if the task is found, you would update it here
 
@@ -94,46 +89,43 @@ def edit_menu():
             if path_of_list :
                 deleteTask = input("Enter the Title of the task to delete: ")
                 try :
-                    FileModule.delete_Task(path_of_list,deleteTask)
+                    tasks.delete_task(path_of_list,deleteTask)
                     print("The process was completed successfully.")
                 except Exception :
-                    print(f"{AtentionColor}Something is wrong with the input variable. Erorr :{resetColor}")
+                    print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
                  
             
         elif edit_choice == "4":
             print("----\nView all tasks in list ----------------\n ")
             print("select the title of the lists : \n")
-            FileModule.show_All_lists()
+            lists.show_All_lists()
             
             Target_list = input("input the title: \n")
             try :
                 
-                path_of_list = FileModule.getPath(Target_list)
-                FileModule.Show_List(path_of_list)
+                path_of_list = utils.getPath(Target_list)
+                lists.Show_List(path_of_list)
             except Exception :
-                print(f"{AtentionColor}Something is wrong with the input variable. Erorr :{resetColor}")
+                print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
                  
 
         elif edit_choice == "5":
             print("----\nDelete a list -------------------------\n ")
 
-            FileModule.show_All_lists()
+            lists.show_All_lists()
             print("select the title of the lists : \n")
             try :
                 Target_list = input("input the title: \n")
-                path_of_list = FileModule.getPath(Target_list)
+                path_of_list = utils.getPath(Target_list)
                 confirm_delete = input("Do you want to delete it completely? (y/n) ")
-                
-            #-------------------------------
-                tableListPath = FileModule.getPath_TableList()
-            #-------------------------------
+
                 if  confirm_delete.lower().strip() == 'y':
-                    FileModule.delete_List(path_of_list,tableListPath) 
+                    lists.delete_List(path_of_list,TABLE_LIST_PATH) 
                     print("List deleted successfully")  
                 else:
-                    print(f"{AtentionColor}the process canceled{resetColor}")
+                    print(f"{ATTENTION_COLOR}the process canceled{RESET_COLOR}")
             except Exception :
-                print(f"{AtentionColor}Something is wrong with the input variable. Erorr :{resetColor}")
+                print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
                  
             
         elif edit_choice == "6":
@@ -149,8 +141,8 @@ def edit_menu():
             exit()
             
         else:
-            print(f"{AtentionColor}wrong input please try again later :)\n")
-            print(f"Returning to the main menu{resetColor}")
+            print(f"{ATTENTION_COLOR}wrong input please try again later :)\n")
+            print(f"Returning to the main menu{RESET_COLOR}")
             print("------------------------------------------------")
             break
 #endregion            
@@ -170,7 +162,7 @@ def main_menu():
     None
     '''
     print(f"---------------- To Do List(s) in this Application ----------------\n")
-    FileModule.show_All_lists()
+    lists.show_All_lists()
     while True:
 
         print ("\nMenu :")
@@ -183,7 +175,7 @@ def main_menu():
             List_Title = input("Enter the Title of the list: ")          
             #---- create a new list
             #---- add the list to the file
-            (path,field, To_Do_List_ID) = FileModule.Create_New_list(List_Title)
+            (path,field, To_Do_List_ID) = lists.Create_New_list(List_Title)
             #---- for add tasks this is run in the function Create_New_list
             #---- if the user want to add tasks, this function will be called
             
@@ -192,13 +184,13 @@ def main_menu():
             
         elif main_choice == "3":
             print("\nShowing : .................................\n ")
-            FileModule.show_All_lists()
+            lists.show_All_lists()
             try :
                 Target_list= input("what list do you want to show?\n:")
-                todo_list_path = FileModule.getPath(Target_list)    
-                FileModule.Show_List(todo_list_path)
+                todo_list_path = utils.getPath(Target_list)    
+                lists.Show_List(todo_list_path)
             except Exception :
-                print(f"{WarningColor}Something is wrong with the input variable.{resetColor}")
+                print(f"{WARNING_COLOR}Something is wrong with the input variable.{RESET_COLOR}")
             
             
         elif main_choice == "4":
@@ -208,9 +200,9 @@ def main_menu():
             break
         
         else :
-            print(f"{AtentionColor}Unknow input .-.-.-.-.-.-.-.-.-.-.-.-.-..-.--.-.-.-.-.-\n ")
+            print(f"{ATTENTION_COLOR}Unknow input .-.-.-.-.-.-.-.-.-.-.-.-.-..-.--.-.-.-.-.-\n ")
 
-            print(f"wrong input please try again :){resetColor}")
+            print(f"wrong input please try again :){RESET_COLOR}")
 
 #endregion        
 

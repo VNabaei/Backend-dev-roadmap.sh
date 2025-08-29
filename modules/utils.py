@@ -57,24 +57,6 @@ def Foulder_of_ToDoList_Creator (todolist_title):
 #endregion    
 
 
-def Get_User():
-    '''
-    Getting User from operation system
-    
-    Parametr(s):
-    ------------
-    None
-    
-    Return(s):
-    ----------
-    user or Unknown :str
-    '''
-    try:
-        user = getpass.getuser()
-        return user
-    except Exception:
-        return "Unknown"
-
 def Deadline_Creator():
     '''
     It takes a date from the user and checks that its format is Y /MM /DD. And the date is in the future. If the user does not enter a date, it outputs the date of that day.
@@ -258,5 +240,89 @@ def colored_progress_bar(percent: float, length: int = 30) -> str:
     bar = f"{color}{'█' * filled_length}{reset}{'-' * empty_length}"
 
     return f"[{bar}] {percent}%"
+
+
+# Get Function :
+#----------------------------------------------------------------------
+def Get_User():
+    '''
+    Getting User from operation system
+    
+    Parametr(s):
+    ------------
+    None
+    
+    Return(s):
+    ----------
+    user or Unknown :str
+    '''
+    try:
+        user = getpass.getuser()
+        return user
+    except Exception:
+        return "Unknown"
+
+
+def getPath(list_select):
+    '''
+    This function finds the address of the To Do List from the table list.
+    
+    Parametr(s) :
+    -----------
+    list_select : str
+    the Title of to do list or task
+    
+    Return(s) :
+    ---------
+    path
+    
+    '''
+    reader = storage.read_csv(TABLE_LIST_PATH)
+    for row in reader:
+        if row.get('Title', '').strip().lower() == list_select.strip().lower():
+            return row.get('path')
+    return None 
+
+def getId(list_Title: str, task_title: str = None):
+    '''
+    This function returns ID of either a ToDoList or a Task.
+    
+    Parameters
+    ----------
+    list_Title : str
+        Title of the ToDoList
+    task_title : str, optional
+        Title of the task (if provided, returns Task ID instead of List ID)
+    
+    Returns
+    -------
+    str or None
+        ID of the ToDoList or Task
+    '''
+    
+    # search in lists
+    reader = storage.read_csv(TABLE_LIST_PATH)
+
+    for row in reader:
+        if row.get("Title") == list_Title:
+            list_id = row.get("Id")
+            list_path = row.get("Path")
+                
+                #just for list
+            if task_title is None:
+                return list_id
+                
+                # Just for task selected
+            if os.path.exists(list_path):
+                task_reader = storage.read_csv(list_path)
+                for task in task_reader:
+                    if task.get("Title", "").strip().lower() == task_title.strip().lower():
+                        return task.get("Id")
+            else:
+                    
+                return None
+    
+    return None
+
 
 #endregion   
