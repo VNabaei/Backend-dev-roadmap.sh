@@ -9,7 +9,7 @@ def read_csv(path) :
     with open(path,"r",encoding = "utf-8") as f :
         return list(csv.DictReader(f))
     
-def totalwrite_csv(path,fieldnames,rows=[]) -> csv:
+def totalwrite_csv(path,fieldnames,rows = []) -> csv:
     #NOTE : this function write a csv file, if file is exist, then it is rewrite.
     '''
     This function writes the file completely from the beginning.
@@ -28,14 +28,14 @@ def totalwrite_csv(path,fieldnames,rows=[]) -> csv:
     csv :  file
     
     '''
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"{path} does not exist.")
+    # if not os.path.exists(path):
+    #     raise FileNotFoundError(f"{path} does not exist.")
 
-    else:
-        with open(path,"w",newline="",encoding="utf-8") as f:
-            writer = csv.DictWriter(f,fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(rows)
+   
+    with open(path,"w",newline="",encoding="utf-8") as f:
+        writer = csv.DictWriter(f,fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
     
 def write_csv(path,fieldnames,rows):
     '''

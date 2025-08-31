@@ -1,8 +1,28 @@
-import storage 
+"""Lists 
+اینها باید چنچ شوند
+This exports:
+  - all functions from posix or nt, e.g. unlink, stat, etc.
+  - os.path is either posixpath or ntpath
+  - os.name is either 'posix' or 'nt'
+  - os.curdir is a string representing the current directory (always '.')
+  - os.pardir is a string representing the parent directory (always '..')
+  - os.sep is the (or a most common) pathname separator ('/' or '\\')
+  - os.extsep is the extension separator (always '.')
+  - os.altsep is the alternate pathname separator (None or '/')
+  - os.pathsep is the component separator used in $PATH etc
+  - os.linesep is the line separator in text files ('\r' or '\n' or '\r\n')
+  - os.defpath is the default search path for executables
+  - os.devnull is the file path of the null device ('/dev/null', etc.)
+
+Programs that import and use 'os' stand a better chance of being
+portable between different platforms.  Of course, they must then
+only use functions that are defined by all platforms (e.g., unlink
+and opendir), and leave all pathname manipulation to os.path
+(e.g., split and join).
+"""
+from modules import storage,utils,tasks
 import os
-import utils
-import tasks
-from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TASKS,FIELDS_TABLE,FILE_STATUS
+from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TASKS,FIELDS_TABLE,FILE_STATUS,EXPIRED_COLORE,DUE_TODAY_COLOER,ACTIVE_COLORE,RESET_COLOR
 
 #region : To Do List file creator : 
 
@@ -54,10 +74,10 @@ def Create_New_list(title_list :str):
             if row.get("Title","") == title_list:
                  ToDoList_id = row.get("Id","")
        
-        tasks.Add_Task(file_path,ToDoList_id)
+        tasks.add_task(file_path,ToDoList_id)
     else:
         print("No tasks added to the list.")
-        tasks.Null_ToDoList_creator(file_path)
+        tasks.null_todolist_creator(file_path)
         
       
     # ---- File creation operation completed.
@@ -153,26 +173,22 @@ def Show_List(file_path):
         return
     print("in this To Do lists :\n")
     print(f"Progress percentage :  {utils.colored_progress_bar(Progress_percentage)}\n")
-    print("-------------------------")
-    print(f"{status_of_list['Done']} task(S) was Done \n|{status_of_list['In_progress']} task(s) in progress \n|{status_of_list['ToDO']} task(s) To Do \n|{status_of_list['Deleyed']} task(s) is deleyed \n")
-    print("Task status by deadline -------------------------\n")
+    print(f" ---- in {status_of_list['conter']} task(s)")
+    print(f"{status_of_list['Done']} task(S) was Done \n|{status_of_list['In_progress']} task(s) in progress \n|{status_of_list['ToDo']} task(s) To Do \n|{status_of_list['Deleyed']} task(s) is deleyed \n")
+    print(" ---- Task status by deadline n")
     
     #TODO : نمایش تسک ها بر اساس تاخیر ددلاین 
     #the colors :
-    colorExpired = "\033[91m" 
-    colorDue_Today = "\033[93m"
-    colorActive = "\033[92m"
-    reset = "\033[0m"
     
-    print (f"{colorExpired}Expired{reset} :\n")
+    print (f"{EXPIRED_COLORE}Expired{RESET_COLOR} :\n")
     
     print(list(row.get('Title') for row in tasks if utils.check_deadline_status(row.get("DeadLine"))== "Expired" ))
     # print("--------------------\n")
-    print (f"\n{colorDue_Today}Due Today {reset}:\n")
+    print (f"\n{DUE_TODAY_COLOER}Due Today {RESET_COLOR}:\n")
     print(list (row.get('Title') for row in tasks if utils.check_deadline_status(row.get("DeadLine"))== "Due Today" ))
     # print("--------------------\n")
-    print (f"\n{colorActive}Active {reset}:\n")
-    print(list(row.get('Title') for row in tasks if utils.check_deadline_status(row.get("DeadLine"))== "Active" ))
+    print (f"\n{ACTIVE_COLORE}Active {RESET_COLOR}:\n")
+    print(list(row.get('Title') for row in tasks if utils.check_deadline_status(row.get("DeadLine")) in ("Active","Due Today") ))
 
     print("-----------------------------------------------------------------------")
    
@@ -249,19 +265,19 @@ def list_Status(file_Path):
     Deleyed_conter = 0
     conter = 0
     for row in tasks :
-        check = row.get('Status')
+        check = row.get('Task_Status')
         conter += 1
         match check :
             case 'Todo' :
                 ToDo_Conter += 1
             case 'Done':
                 Done_Conter += 1
-            case 'In Progress' :
+            case 'In_progress' :
                 InProgress_conter += 1
             case 'Deleyed' :
                 Deleyed_conter += 1
-            case _ :
-                print("warning : check the status")
+            # case _ :
+            #     print("warning : check the status")
     try :
         Progress_percentage = (Done_Conter/conter)*100
         
@@ -270,7 +286,8 @@ def list_Status(file_Path):
             "ToDo" : ToDo_Conter,
             "Done" : Done_Conter,
             "In_progress" : InProgress_conter,
-            "Deleyed" : Deleyed_conter
+            "Deleyed" : Deleyed_conter,
+            "conter" : conter
             }
         return  status
     except :
@@ -281,7 +298,8 @@ def list_Status(file_Path):
             "ToDo" : ToDo_Conter,
             "Done" : Done_Conter,
             "In_progress" : InProgress_conter,
-            "Deleyed" : Deleyed_conter
+            "Deleyed" : Deleyed_conter,
+            "Conter" : 0
             }
         
         return status

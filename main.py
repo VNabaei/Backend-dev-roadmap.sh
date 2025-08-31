@@ -1,4 +1,6 @@
-from modules import lists,tasks,utils,storage
+
+from modules import storage,lists,tasks,utils
+
 from config import WARNING_COLOR,ATTENTION_COLOR,RESET_COLOR,TABLE_LIST_PATH
 
 
@@ -61,11 +63,11 @@ def edit_menu():
             lists.show_All_lists()
             
             Target_list= input("Which list do you want to add task(s)? ")
-            try :
-                todo_list_path = utils.getPath(Target_list)  
-                tasks.add_task(todo_list_path ,utils.getId(Target_list))
-            except Exception :
-                print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
+            # try :
+            todo_list_path = utils.getPath(Target_list)  
+            tasks.add_task(todo_list_path ,utils.getId(Target_list))
+            # except Exception :
+                # print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
             
         elif edit_choice == "2":
             print("----\nEdit a task -------------------------\n ")
@@ -175,10 +177,16 @@ def main_menu():
             List_Title = input("Enter the Title of the list: ")          
             #---- create a new list
             #---- add the list to the file
-            (path,field, To_Do_List_ID) = lists.Create_New_list(List_Title)
+            if not List_Title == "" :
+                (path, To_Do_List_ID) = lists.Create_New_list(List_Title)
             #---- for add tasks this is run in the function Create_New_list
             #---- if the user want to add tasks, this function will be called
-            
+            else :
+                print(f"{ATTENTION_COLOR}Unknow input .-.-.-.-.-.-.-.-.-.-.-.-.-..-.--.-.-.-.-.-\n ")
+
+                print(f"wrong input please try again :){RESET_COLOR}")
+                continue
+                
         elif main_choice == "2":
             edit_menu()
             

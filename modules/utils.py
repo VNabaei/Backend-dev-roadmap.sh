@@ -1,7 +1,7 @@
 from datetime import datetime,date
 import os
 import getpass
-import storage
+from modules import storage
 from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TABLE,FILE_STATUS
 
 #region : the functions in FileModule.py
@@ -11,16 +11,17 @@ def Add_List_in_Table_list(todolist_title):
     try :
             reader = storage.read_csv(TABLE_LIST_PATH)
             
-            data = [
+            data =[
                 {
                     'Id':datetime.today().strftime("%Y%m%d%H%M%S")
                     ,'Title' : todolist_title
                     ,'Creator' : Get_User()
                     ,'Created_at' : datetime.today()
                     ,'File_status' : FILE_STATUS[0]
-                    ,'Path' : TABLE_LIST_PATH #INFO : We need this to check the to do list ID
+                    ,'Path' : os.path.join(APP_FOLDER_PATH,f"{todolist_title}.csv") # INFO : creat file path #INFO : We need this to check the to do list ID
                 }
-            ]
+                ]
+            
             reader.extend(data)
     except ValueError as error :
         print(f"The operation to create the lists table failed. Error: {error}\n")
@@ -263,7 +264,7 @@ def Get_User():
         return "Unknown"
 
 
-def getPath(list_select):
+def getPath(list_select : str):
     '''
     This function finds the address of the To Do List from the table list.
     
@@ -279,8 +280,9 @@ def getPath(list_select):
     '''
     reader = storage.read_csv(TABLE_LIST_PATH)
     for row in reader:
-        if row.get('Title', '').strip().lower() == list_select.strip().lower():
-            return row.get('path')
+        chosen_list = list_select.strip().lower()
+        if row.get('Title', '').strip().lower() == chosen_list :
+            return row.get('Path')
     return None 
 
 def getId(list_Title: str, task_title: str = None):

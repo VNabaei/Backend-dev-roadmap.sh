@@ -18,8 +18,8 @@ def add_task(file_path,todolist_id):
             "Title"  : title,
             "Descreaption" : input("Add descreaption\n:"),
             "DeadLine" : utils.Deadline_Creator(),
-            "Task_status" : TASK_STATUS[1],
-            "Created_at" : datetime.today().date(),
+            "Task_Status" : TASK_STATUS[1],
+            "Create_at" : datetime.today().date(),
             "Edited_by" : utils.Editor(),
             "Create_by" : utils.Get_User(),
             "File_status" :FILE_STATUS[0]
@@ -116,12 +116,12 @@ def Edit_Task(file_path,task_title):
                         task['DeadLine'] = utils.Deadline_Creator()
                     case "4": 
                         i= input('enter the status (1.Done, 2.Todo, 3.In Progress): ')
-                        task['Status'] = TASK_STATUS[int(i)-1]
+                        task['Task_Status'] = TASK_STATUS[int(i)-1]
                     case __ :
                         print("the input is wrong")
                         return
                         
-                task['file_status'] = FILE_STATUS[1]
+                task['File_status'] = FILE_STATUS[1]
                 task_found = True
         if not task_found :
             print(f"{task_title} not found")
@@ -152,8 +152,8 @@ def Show_the_task(file_path,task_title):
     if not os.path.exists(file_path):
         return
     tasks = storage.read_csv(file_path)
-    target_task = [row for row in tasks if (row.get("Statusfile", "").lower() != "delete") and (row.get("title", "").strip().lower() == task_title.strip().lower())]
+    target_task = [row for row in tasks if (row.get("File_status", "").lower() != "Deleted") and (row.get("Title", "").strip().lower() == task_title.strip().lower())]
     for task in target_task:
-            print(f"Title: {task.get('title', '')} |Descreaption: {task.get('Descreaption', '')} | Status: {task.get('Status', '')}DeadLine: {task.get('DeadLine', '')} | Created at: {task.get('Created_at', '')} ")
+            print(f"Title: {task.get('Title', '')} |Descreaption: {task.get('Descreaption', '')} | Status: {task.get('Task_Status', '')}DeadLine: {task.get('DeadLine', '')} | Created at: {task.get('Create_at', '')} ")
 
 #endrigion
