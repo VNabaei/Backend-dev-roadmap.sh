@@ -1,13 +1,167 @@
+"""
+Utils Module
+=============
+
+This module handles file management and basic operations related to **ToDo Lists**.
+
+It includes functions for:
+    - Creating and managing folders and the main table of lists
+    - Getting IDs of lists and tasks
+    - Checking the deadline status of tasks
+    - Generating colored progress bars
+    - Retrieving the operating system user
+
+This module interacts with other modules (`storage`) and the configuration file (`config`).
+
+------------------------------
+Main Features
+------------------------------
+
+1. Folder and Table Management
+   - `Add_List_in_Table_list(todolist_title, todolist_path)` : Adds a list entry to the main table
+   - `Foulder_of_ToDoList_Creator(todolist_title)` : Creates the application folder and initializes the list table
+
+2. Deadline Management
+   - `Deadline_Creator()` : Prompts user for a valid future date in `YYYY/MM/DD` format. Defaults to today if empty.
+   - `task_deadline_status(deadline_str)` : Returns task status based on its deadline ("Active", "Due Today", "Expired").
+   - `check_deadline_status(deadline_str)` : Checks multiple date formats and returns task status
+
+3. ID Generation
+   - `ID_Generator(TodoList_Path, ToDoList_ID)` : Generates a unique Task ID in the format `TDL-{TDL_ID}-TSK-{YYYYMMDDHHMMSS}{counter}`
+
+4. User Handling
+   - `Editor()` : Returns the current user editing a task
+   - `Get_User()` : Gets the username from the operating system
+
+5. File & Path Utilities
+   - `getPath(list_select)` : Returns the path of a ToDoList from the main table
+   - `getId(list_Title, task_title=None)` : Returns the ID of a ToDoList or a specific task
+   - `getTodolistId(todolist_path, title_list)` : Returns the ToDoList ID from the list file
+
+6. Progress Visualization
+   - `colored_progress_bar(percent, length=30)` : Returns a colored progress bar representing completion percentage
+
+------------------------------
+Important Constants
+------------------------------
+
+- `TABLE_LIST_PATH` : Path to the main table storing lists
+- `APP_FOLDER_PATH` : Folder for ToDoList files
+- `FIELDS_TABLE` : Columns for the main table
+- `FILE_STATUS` : Status of lists (Active, Deleted, etc.)
+
+------------------------------
+Function Details
+------------------------------
+
+- `Add_List_in_Table_list(todolist_title, todolist_path)` : Adds a new list entry to the main table with ID, creator, creation date, and file path
+- `Foulder_of_ToDoList_Creator(todolist_title)` : Creates the main application folder and initializes the list table with the given list title
+- `Deadline_Creator()` : Prompts the user for a valid future date; defaults to today if input is empty
+- `ID_Generator(TodoList_Path, ToDoList_ID)` : Generates a unique ID for each task in a ToDoList
+- `Editor()` : Returns the user who edits a task
+- `task_deadline_status(deadline_str)` / `check_deadline_status(deadline_str)` : Determines the status of a task
+- `colored_progress_bar(percent, length=30)` : Creates a visual colored progress bar proportional to completion percentage
+- `Get_User()` : Retrieves the current system user or returns "Unknown"
+- `getPath(list_select)` : Returns the file path of a selected ToDoList
+- `getId(list_Title, task_title=None)` : Returns the ID of the list or a specific task
+- `getTodolistId(todolist_path, title_list)` : Returns the ToDoList ID from a given list file
+
+------------------------------
+Notes
+------------------------------
+
+- All dates are managed in `YYYY/MM/DD` format
+- Task IDs are unique per ToDoList
+- This module is tightly coupled with `storage` for CSV read/write operations
+- Functions include input validation to prevent incorrect dates or paths
+
+ماژول utils
+=============
+
+این ماژول مسئول مدیریت فایل‌ها و عملیات پایه‌ای مرتبط با **لیست‌های کار (ToDo Lists)** است.
+
+شامل توابعی برای:
+    - ایجاد و مدیریت پوشه‌ها و جدول اصلی لیست‌ها
+    - دریافت شناسه لیست و تسک‌ها
+    - بررسی وضعیت ددلاین تسک‌ها
+    - تولید نوار پیشرفت رنگی
+    - دریافت کاربر سیستم عامل
+
+این ماژول با سایر ماژول‌ها (`storage`) و فایل پیکربندی (`config`) تعامل دارد.
+
+------------------------------
+امکانات اصلی
+------------------------------
+
+1. مدیریت پوشه و جدول
+   - `Add_List_in_Table_list(todolist_title, todolist_path)` : اضافه کردن رکورد لیست به جدول اصلی
+   - `Foulder_of_ToDoList_Creator(todolist_title)` : ایجاد پوشه اصلی برنامه و مقداردهی اولیه جدول لیست‌ها
+
+2. مدیریت ددلاین
+   - `Deadline_Creator()` : گرفتن تاریخ معتبر آینده از کاربر با فرمت `YYYY/MM/DD`. در صورت عدم وارد کردن، تاریخ امروز انتخاب می‌شود.
+   - `task_deadline_status(deadline_str)` : وضعیت تسک را بر اساس ددلاین برمی‌گرداند ("Active", "Due Today", "Expired")
+   - `check_deadline_status(deadline_str)` : بررسی چندین فرمت تاریخ و تعیین وضعیت تسک
+
+3. تولید شناسه
+   - `ID_Generator(TodoList_Path, ToDoList_ID)` : تولید شناسه یکتا برای هر تسک با فرمت `TDL-{TDL_ID}-TSK-{YYYYMMDDHHMMSS}{counter}`
+
+4. مدیریت کاربر
+   - `Editor()` : کاربر فعلی که تسک را ویرایش می‌کند را برمی‌گرداند
+   - `Get_User()` : دریافت نام کاربر از سیستم عامل
+
+5. ابزارهای مسیر و فایل
+   - `getPath(list_select)` : مسیر فایل لیست انتخابی را از جدول اصلی برمی‌گرداند
+   - `getId(list_Title, task_title=None)` : شناسه لیست یا تسک مشخص را برمی‌گرداند
+   - `getTodolistId(todolist_path, title_list)` : شناسه لیست را از فایل لیست برمی‌گرداند
+
+6. نمایش پیشرفت
+   - `colored_progress_bar(percent, length=30)` : نوار پیشرفت رنگی متناسب با درصد پیشرفت ایجاد می‌کند
+
+------------------------------
+ثابت‌های مهم
+------------------------------
+
+- `TABLE_LIST_PATH` : مسیر جدول اصلی لیست‌ها
+- `APP_FOLDER_PATH` : پوشه ذخیره‌سازی فایل‌های ToDo List
+- `FIELDS_TABLE` : ستون‌های جدول اصلی
+- `FILE_STATUS` : وضعیت فایل‌ها (فعال، حذف‌شده و ...)
+
+------------------------------
+جزئیات توابع
+------------------------------
+
+- `Add_List_in_Table_list(todolist_title, todolist_path)` : اضافه کردن رکورد جدید به جدول اصلی با اطلاعات: ID، سازنده، تاریخ ایجاد و مسیر فایل
+- `Foulder_of_ToDoList_Creator(todolist_title)` : ایجاد پوشه اصلی برنامه و مقداردهی اولیه جدول لیست‌ها
+- `Deadline_Creator()` : گرفتن تاریخ معتبر آینده از کاربر؛ در صورت عدم وارد کردن، تاریخ امروز برگردانده می‌شود
+- `ID_Generator(TodoList_Path, ToDoList_ID)` : تولید شناسه یکتا برای هر تسک
+- `Editor()` : بازگرداندن کاربر ویرایشگر تسک
+- `task_deadline_status(deadline_str)` / `check_deadline_status(deadline_str)` : تعیین وضعیت تسک
+- `colored_progress_bar(percent, length=30)` : ایجاد نوار پیشرفت رنگی متناسب با درصد تکمیل
+- `Get_User()` : دریافت کاربر فعلی سیستم یا "Unknown"
+- `getPath(list_select)` : برگرداندن مسیر فایل لیست انتخاب شده
+- `getId(list_Title, task_title=None)` : برگرداندن شناسه لیست یا تسک مشخص
+- `getTodolistId(todolist_path, title_list)` : برگرداندن شناسه لیست از فایل مربوطه
+
+------------------------------
+نکات و توصیه‌ها
+------------------------------
+
+- تمام تاریخ‌ها با فرمت `YYYY/MM/DD` مدیریت می‌شوند
+- شناسه تسک‌ها به‌صورت یکتا برای هر لیست تولید می‌شوند
+- این ماژول به `storage` برای خواندن و نوشتن CSV وابسته است
+- توابع شامل اعتبارسنجی ورودی برای جلوگیری از ورود داده اشتباه هستند
+"""
+
 from datetime import datetime,date
 import os
 import getpass
 from modules import storage
 from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TABLE,FILE_STATUS
 
-#region : the functions in FileModule.py
+#region : the functions 
 # -------------------------------------------------------------
 #Folder Handeller :
-def Add_List_in_Table_list(todolist_title):
+def Add_List_in_Table_list(todolist_title,todolist_path):
     try :
             reader = storage.read_csv(TABLE_LIST_PATH)
             
@@ -18,7 +172,7 @@ def Add_List_in_Table_list(todolist_title):
                     ,'Creator' : Get_User()
                     ,'Created_at' : datetime.today()
                     ,'File_status' : FILE_STATUS[0]
-                    ,'Path' : os.path.join(APP_FOLDER_PATH,f"{todolist_title}.csv") # INFO : creat file path #INFO : We need this to check the to do list ID
+                    ,'Path' : todolist_path # INFO : creat file path #INFO : We need this to check the to do list ID
                 }
                 ]
             
@@ -325,6 +479,12 @@ def getId(list_Title: str, task_title: str = None):
                 return None
     
     return None
-
+def getTodolistId(todolist_path,title_list) :
+    reader = storage.read_csv(todolist_path) 
+    for row in reader :
+        if row.get("Title","") == title_list:
+            ToDoList_id = row.get("Id","")
+            return ToDoList_id
+    print(f"{Warning}{title_list} not found!")
 
 #endregion   

@@ -1,5 +1,111 @@
+"""
+Task Module
+=============
+
+This module manages **tasks** within ToDo Lists.
+
+It provides functions for:
+    - Adding new tasks
+    - Creating empty ToDoList files
+    - Editing and deleting tasks
+    - Displaying tasks with details
+
+The module interacts with `storage` for CSV operations and `utils` for helper functions such as ID generation, deadline creation, and user retrieval.
+
+------------------------------
+Main Features
+------------------------------
+
+1. Task Creation
+   - `add_task(file_path, todolist_id)` : Adds tasks to a ToDoList file
+   - `null_todolist_creator(file_path)` : Creates an empty ToDoList file
+
+2. Task Operations
+   - `delete_task(file_path, task_title)` : Marks a task as deleted in the CSV file
+   - `Edit_Task(file_path, task_title)` : Edits attributes of a task and updates the file
+   - `Show_the_task(file_path, task_title)` : Displays detailed information of a task
+
+3. Utilities
+   - Interacts with `utils.ID_Generator` for unique task IDs
+   - Uses `utils.Deadline_Creator` for deadline input
+   - Uses `utils.Editor` and `utils.Get_User` to track who edits or creates tasks
+   - Works with constants like `FIELDS_TASKS`, `FILE_STATUS`, and `TASK_STATUS` for file integrity and status management
+
+------------------------------
+Function Details
+------------------------------
+
+- `add_task(file_path, todolist_id)` : Prompts the user to enter multiple tasks with title, description, deadline, and status. Saves all tasks to the CSV file.
+- `null_todolist_creator(file_path)` : Creates an empty CSV file with headers
+- `delete_task(file_path, task_title)` : Marks tasks as deleted and overwrites the CSV file
+- `Edit_Task(file_path, task_title)` : Finds a task by title, allows editing of its title, description, deadline, and status
+- `Show_the_task(file_path, task_title)` : Displays task details in a readable format
+
+------------------------------
+Notes
+------------------------------
+
+- Task IDs are generated uniquely per ToDoList
+- Deadlines must follow `YYYY/MM/DD` format
+- Editing or deleting requires the file to exist
+- The module handles input validation to prevent incorrect task information
+
+
+ماژول وظایف
+=============
+
+این ماژول مسئول مدیریت **تسک‌ها** در داخل لیست‌های کار (ToDo Lists) است.
+
+شامل توابعی برای:
+    - اضافه کردن تسک‌های جدید
+    - ایجاد فایل‌های ToDoList خالی
+    - ویرایش و حذف تسک‌ها
+    - نمایش تسک‌ها با جزئیات
+
+این ماژول با `storage` برای عملیات CSV و `utils` برای توابع کمکی مانند تولید شناسه، ایجاد ددلاین و دریافت کاربر تعامل دارد.
+
+------------------------------
+امکانات اصلی
+------------------------------
+
+1. ایجاد تسک
+   - `add_task(file_path, todolist_id)` : اضافه کردن تسک به فایل ToDoList
+   - `null_todolist_creator(file_path)` : ایجاد فایل ToDoList خالی
+
+2. عملیات تسک
+   - `delete_task(file_path, task_title)` : تغییر وضعیت تسک به حذف‌شده در فایل CSV
+   - `Edit_Task(file_path, task_title)` : ویرایش ویژگی‌های یک تسک و بروزرسانی فایل
+   - `Show_the_task(file_path, task_title)` : نمایش اطلاعات کامل یک تسک
+
+3. ابزارهای کمکی
+   - استفاده از `utils.ID_Generator` برای تولید شناسه یکتا
+   - استفاده از `utils.Deadline_Creator` برای دریافت ددلاین
+   - استفاده از `utils.Editor` و `utils.Get_User` برای ثبت کاربر ایجادکننده یا ویرایشگر
+   - کار با ثابت‌هایی مانند `FIELDS_TASKS`، `FILE_STATUS` و `TASK_STATUS` برای مدیریت وضعیت و یکپارچگی فایل
+
+------------------------------
+جزئیات توابع
+------------------------------
+
+- `add_task(file_path, todolist_id)` : از کاربر می‌خواهد چند تسک با عنوان، توضیحات، ددلاین و وضعیت وارد کند و همه را در فایل CSV ذخیره می‌کند
+- `null_todolist_creator(file_path)` : ایجاد فایل CSV خالی با سرفصل‌ها
+- `delete_task(file_path, task_title)` : تغییر وضعیت تسک به حذف‌شده و بازنویسی فایل CSV
+- `Edit_Task(file_path, task_title)` : پیدا کردن تسک با عنوان، ویرایش عنوان، توضیح، ددلاین و وضعیت آن
+- `Show_the_task(file_path, task_title)` : نمایش جزئیات تسک به صورت خوانا
+
+------------------------------
+نکات و توصیه‌ها
+------------------------------
+
+- شناسه‌های تسک برای هر ToDoList یکتا هستند
+- ددلاین‌ها باید با فرمت `YYYY/MM/DD` باشند
+- برای ویرایش یا حذف فایل باید وجود داشته باشد
+- ماژول شامل اعتبارسنجی ورودی برای جلوگیری از اطلاعات نادرست تسک‌ها است
+"""
+
+
 from datetime import datetime
-from config import FIELDS_TASKS,FILE_STATUS,TASK_STATUS
+from config import FIELDS_TASKS,FILE_STATUS,TASK_STATUS,WARNING_COLOR,RESET_COLOR,ATTENTION_COLOR,CORRECT_COLORE
 from modules import storage,utils
 # from modules.utils import get_user
 import os
@@ -37,7 +143,7 @@ def null_todolist_creator(file_path):
 #region : operation function of task :
 
 # ----- delete 
-def delete_task(file_path,task_title) :
+def delete_task(file_path,task_title ) :
     '''
     This function changes the file status in the given task to "deleted".
     
@@ -53,6 +159,9 @@ def delete_task(file_path,task_title) :
     -------
     None
     '''
+    if task_title is None:
+        task_title = []
+        
     if not os.path.exists(file_path):
         print(f"{file_path} does not exist.")
         return
@@ -60,21 +169,30 @@ def delete_task(file_path,task_title) :
         tasks = storage.read_csv(file_path)
         task_found = False
         data = []
-        for task in tasks:
-            if  task['Title'].strip().lower() == task_title.strip().lower():
-                # task['file_status'] = file_status[2] NOTE : The log will be recorded in the action record.
-                #TODO : recorde the log
+        deleted_tasks = []
+        task_notfound = []
+        
+        for task in tasks :
+    
+            if task['Title'].strip().lower() in [t.strip().lower() for t in task_title]:
+                deleted_tasks.append(task['Title'])
                 task_found = True
-            else :
+                
+            else:
                 data.append(task)
+
                 
         if not task_found :
-            print(f"{task_title} not found")
+            print(f"{WARNING_COLOR}{task_title} not found{RESET_COLOR}")
             return
+        else:
+            print(f"{CORRECT_COLORE}{deleted_tasks} was found")
+            
+            
         try :
             storage.totalwrite_csv(file_path,FIELDS_TASKS,data)
         except ValueError as error :
-            print(f"The task deletion operation failed while overwriting the file. Error: {error} \n")
+            print(f"{ATTENTION_COLOR}The task deletion operation failed while overwriting the file. Error: {error}{RESET_COLOR} \n")
 
 # ----- Editing
 

@@ -1,7 +1,7 @@
 
 from modules import storage,lists,tasks,utils
 
-from config import WARNING_COLOR,ATTENTION_COLOR,RESET_COLOR,TABLE_LIST_PATH
+from config import WARNING_COLOR,ATTENTION_COLOR,RESET_COLOR,TABLE_LIST_PATH,CORRECT_COLORE
 
 
 #region : operation function:
@@ -89,10 +89,10 @@ def edit_menu():
             print("for delete, do this steps :\n")
             path_of_list = Show2Select()
             if path_of_list :
-                deleteTask = input("Enter the Title of the task to delete: ")
+                deleteTask = input("Enter the Title(s) of the task(s) to delete: [Use commas(,) to separate titles.] ").split(",")
                 try :
                     tasks.delete_task(path_of_list,deleteTask)
-                    print("The process was completed successfully.")
+                    print(f"{CORRECT_COLORE}The process was completed successfully.{RESET_COLOR}")
                 except Exception :
                     print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
                  
