@@ -322,26 +322,26 @@ def Create_New_list(title_list :str):
     
     # Creating folders for TDL files 
     if not os.path.exists(APP_FOLDER_PATH):
-        utils.Foulder_of_ToDoList_Creator (title_list)
-    else :
-        file_path = os.path.join(APP_FOLDER_PATH,f"{title_list}.csv") # INFO : creat file path
-        #INFO : Checks if the file already exists.
-        if os.path.exists(file_path):
-            #INFO : if exists
-            ans = input ("this list is exists now!\nDo you want replace it ?(y/n)") 
-            if ans.upper() != 'y':
-                #INFO : If the file is not replaced, the operation will stop.
-                while os.path.exists(file_path):
-                    (file_path , title_list) = get_unique_filename(file_path)
+        utils.Foulder_of_ToDoList_Creator ()
+
+    file_path = os.path.join(APP_FOLDER_PATH,f"{title_list}.csv") # INFO : creat file path
+    #INFO : Checks if the file already exists.
+    if os.path.exists(file_path):
+        #INFO : if exists
+        ans = input ("this list is exists now!\nDo you want replace it ?(y/n)") 
+        if ans.upper() != 'y':
+            #INFO : If the file is not replaced, the operation will stop.
+            while os.path.exists(file_path):
+                (file_path , title_list) = get_unique_filename(file_path)
                 
-                utils.Add_List_in_Table_list(title_list,file_path)
-                storage.totalwrite_csv(file_path,FIELDS_TASKS)
-            else : #INFO : If it wants to be replaced, the previous file path is deleted and a new path is created.
-                delete_List(file_path)
-                Create_New_list(title_list) 
-        else :#INFO : if the file not exsist
             utils.Add_List_in_Table_list(title_list,file_path)
-            storage.totalwrite_csv(file_path,FIELDS_TASKS)    
+            storage.totalwrite_csv(file_path,FIELDS_TASKS)
+        else : #INFO : If it wants to be replaced, the previous file path is deleted and a new path is created.
+            delete_List(file_path)
+            Create_New_list(title_list) 
+    else :#INFO : if the file not exsist
+        utils.Add_List_in_Table_list(title_list,file_path)
+        storage.totalwrite_csv(file_path,FIELDS_TASKS)    
      
     # ---- If desired, the file will be completed.   
     

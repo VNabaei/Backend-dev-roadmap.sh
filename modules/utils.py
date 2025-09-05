@@ -164,7 +164,8 @@ from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TABLE,FILE_STATUS
 def Add_List_in_Table_list(todolist_title,todolist_path):
     try :
             reader = storage.read_csv(TABLE_LIST_PATH)
-            
+            if reader is None :
+                reader = []
             data =[
                 {
                     'Id':datetime.today().strftime("%Y%m%d%H%M%S")
@@ -189,22 +190,22 @@ def Add_List_in_Table_list(todolist_title,todolist_path):
         
 # -------------------------------------------------------------
 # FolderCreator :
-def Foulder_of_ToDoList_Creator (todolist_title):
-        os.makedirs(APP_FOLDER_PATH)
+def Foulder_of_ToDoList_Creator ():
+        os.makedirs(APP_FOLDER_PATH, exist_ok=True)
          #INFO : creat path 
         #INFO : Create a table containing list information    
         data = [
             {
-                'Id':datetime.today().strftime("%Y%m%d%H%M%S")
-                ,'Title' : todolist_title
-                ,'Creator' : Get_User()
-                ,'Created_at' : datetime.today()
-                ,'File_status' : FILE_STATUS[0]
-                ,'Path' : os.path.join(APP_FOLDER_PATH,f"{todolist_title}.csv") #INFO : We need this to check the to do list ID
+                'Id'
+                ,'Title'
+                ,'Creator'
+                ,'Created_at'
+                ,'File_status'
+                ,'Path'
             }
          ]
         try : 
-            storage.totalwrite_csv(TABLE_LIST_PATH,FIELDS_TABLE,data)
+            storage.totalwrite_csv(TABLE_LIST_PATH,FIELDS_TABLE)
         except ValueError as error:
             print(f"The operation to create the Folder of todo lists failed. Error: {error}\n")
             
