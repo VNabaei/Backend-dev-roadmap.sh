@@ -263,7 +263,7 @@ This module works together with other modules (`storage`, `utils`, `tasks`) and 
 
 from modules import storage,utils,tasks
 import os
-from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TASKS,FIELDS_TABLE,FILE_STATUS,EXPIRED_COLORE,DUE_TODAY_COLOER,ACTIVE_COLORE,RESET_COLOR
+from config import TABLE_LIST_PATH,APP_FOLDER_PATH,FIELDS_TASKS,FIELDS_TABLE,FILE_STATUS,EXPIRED_COLORE,DUE_TODAY_COLOER,ACTIVE_COLORE,RESET_COLOR,WARNING_COLOR,ATTENTION_COLOR
 
 #region : To Do List file creator : 
 import os
@@ -328,7 +328,7 @@ def Create_New_list(title_list :str):
     #INFO : Checks if the file already exists.
     if os.path.exists(file_path):
         #INFO : if exists
-        ans = input ("this list is exists now!\nDo you want replace it ?(y/n)") 
+        ans = input (f"{ATTENTION_COLOR}this list is exists now!\nDo you want replace it ?(y/n){RESET_COLOR}") 
         if ans.upper() != 'y':
             #INFO : If the file is not replaced, the operation will stop.
             while os.path.exists(file_path):
