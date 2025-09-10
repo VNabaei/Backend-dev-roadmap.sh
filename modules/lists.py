@@ -355,13 +355,13 @@ def Create_New_list(title_list :str):
        
         tasks.add_task(file_path,ToDoList_id)
     else:
-        print("No tasks added to the list.")
+        print(f"{ATTENTION_COLOR}No tasks added to the list.{RESET_COLOR}")
         tasks.null_todolist_creator(file_path)
         
       
     # ---- File creation operation completed.
-    print(f"List {title_list} created successfully at {file_path}")
-    return file_path ,ToDoList_id 
+    print(f"{ACTIVE_COLORE}List {title_list} created successfully at {file_path}{RESET_COLOR}")
+    return file_path  
 #endregion        
 
 
@@ -414,15 +414,21 @@ def show_All_lists():
 
         active_lists = [lst for lst in lists if lst.get("file_status") != FILE_STATUS[2]]
         if not active_lists:
-            print("No active lists available.")
+            print(f"{ATTENTION_COLOR}No active lists available.{RESET_COLOR}")
             return
         print("the title of active Lists : \n")
         for lst in active_lists:
             status_of_list =list_Status(lst.get('Path'))
             Progress_percentage = status_of_list['Progress_percentage']
-            print(f" --> Title : {lst.get('Title',)} | Progress percentage : {utils.colored_progress_bar(Progress_percentage)}")    
+            isTask = status_of_list['Conter']
+            if isTask == 0 :
+                color = ATTENTION_COLOR
+            else :
+                color = RESET_COLOR
+                
+            print(f"{color} --> Title : {lst.get('Title',)} | Progress percentage : {utils.colored_progress_bar(Progress_percentage)}{RESET_COLOR}")    
     except ValueError as error :
-        print(f"The operation to show the todo list failed. Error:{error}\n")
+        print(f"{WARNING_COLOR}The operation to show the todo list failed. Error:{error}{RESET_COLOR}\n")
 
 def Show_List(file_path):
     '''
@@ -439,6 +445,7 @@ def Show_List(file_path):
     None
     '''
     if not os.path.exists(file_path):
+        print(f"{file_path} does not exist.")
         raise FileNotFoundError(f"{file_path} does not exist.")
 
     reader = storage.read_csv(file_path)
@@ -448,7 +455,7 @@ def Show_List(file_path):
     status_of_list = list_Status(file_path)
     Progress_percentage = status_of_list['Progress_percentage']
     if not tasks:
-        print("no active task was found")
+        print(f"{ATTENTION_COLOR}no active task was found{RESET_COLOR}")
         return
     print("in this To Do lists :\n")
     print(f"Progress percentage :  {utils.colored_progress_bar(Progress_percentage)}\n")
@@ -566,11 +573,11 @@ def list_Status(file_Path):
             "Done" : Done_Conter,
             "In_progress" : InProgress_conter,
             "Deleyed" : Deleyed_conter,
-            "conter" : conter
+            "Conter" : conter
             }
         return  status
     except :
-        print("There is no defined task for this To Do list.")
+        print(f"{ATTENTION_COLOR}There is no defined task for this To Do list.{RESET_COLOR} : 👇")
         
         status = {
             "Progress_percentage" : 0,

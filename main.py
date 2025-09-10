@@ -21,7 +21,7 @@ def Show2Select():
         '''
         print("select the title of the lists : \n")
         lists.show_All_lists()
-        Target_list = input("input the title: \n")
+        Target_list = input("+input the title: \n")
         try :
             path_of_list = utils.getPath(Target_list)
             lists.Show_List(path_of_list)
@@ -55,14 +55,14 @@ def edit_menu():
         print("\nEditing .........................................\n")
         print("1.Add a new task\n2.Edit a task \n3.Delete a task \n4.View all tasks"
               "\n5.Delete List \n6.Update the List \n7.Back to main menu \n8.Exit")
-        edit_choice = input("Enter your choice: ")
+        edit_choice = input("+Enter your choice: ")
         
         if edit_choice == "1":
             print("----\nadd task(s) -------------------------\n ")
             print("for adding, do this steps :\n")
             lists.show_All_lists()
             
-            Target_list= input("Which list do you want to add task(s)? ")
+            Target_list= input("+Which list do you want to add task(s)? ")
             # try :
             todo_list_path = utils.getPath(Target_list)  
             tasks.add_task(todo_list_path ,utils.getId(Target_list))
@@ -74,7 +74,7 @@ def edit_menu():
             print("for edit, do this steps :\n")
             path_of_list = Show2Select()
             if path_of_list :
-                ETask = input("Enter the Title of the task to edit: ")
+                ETask = input("+Enter the Title of the task to edit: ")
                 try :
                     
                     tasks.Edit_Task(path_of_list,ETask)
@@ -89,7 +89,7 @@ def edit_menu():
             print("for delete, do this steps :\n")
             path_of_list = Show2Select()
             if path_of_list :
-                deleteTask = input("Enter the Title(s) of the task(s) to delete: [Use commas(,) to separate titles.] ").split(",")
+                deleteTask = input("+Enter the Title(s) of the task(s) to delete: [Use commas(,) to separate titles.] ").split(",")
                 try :
                     tasks.delete_task(path_of_list,deleteTask)
                     print(f"{CORRECT_COLORE}The process was completed successfully.{RESET_COLOR}")
@@ -102,13 +102,13 @@ def edit_menu():
             print("select the title of the lists : \n")
             lists.show_All_lists()
             
-            Target_list = input("input the title: \n")
+            Target_list = input("+input the title: \n")
             try :
                 
                 path_of_list = utils.getPath(Target_list)
                 lists.Show_List(path_of_list)
             except Exception :
-                print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
+                print(f"{ATTENTION_COLOR}Something is wrong with the input variable.{RESET_COLOR}")
                  
 
         elif edit_choice == "5":
@@ -117,9 +117,9 @@ def edit_menu():
             lists.show_All_lists()
             print("select the title of the lists : \n")
             try :
-                Target_list = input("input the title: \n")
+                Target_list = input("+input the title: \n")
                 path_of_list = utils.getPath(Target_list)
-                confirm_delete = input("Do you want to delete it completely? (y/n) ")
+                confirm_delete = input("+Do you want to delete it completely? (y/n) ")
 
                 if  confirm_delete.lower().strip() == 'y':
                     lists.delete_List(path_of_list,TABLE_LIST_PATH) 
@@ -169,16 +169,16 @@ def main_menu():
 
         print ("\nMenu :")
         print ("1.Create a new List\n2.Edit a List\n3.show the tasks \n4.Exit")
-        main_choice = input("Enter your choice: ")
+        main_choice = input("+Enter your choice: ")
         
         if main_choice == "1":
             print("\nCreating new list ...............................\n ")
             #---- input the input_Title of the list
-            List_Title = input("Enter the Title of the list: ")          
+            List_Title = input("+Enter the Title of the list: ")          
             #---- create a new list
             #---- add the list to the file
             if not List_Title == "" :
-                (path, To_Do_List_ID) = lists.Create_New_list(List_Title)
+                path = lists.Create_New_list(List_Title)
             #---- for add tasks this is run in the function Create_New_list
             #---- if the user want to add tasks, this function will be called
             else :
@@ -194,7 +194,7 @@ def main_menu():
             print("\nShowing : .................................\n ")
             lists.show_All_lists()
             try :
-                Target_list= input("what list do you want to show?\n:")
+                Target_list= input("+what list do you want to show?\n:")
                 todo_list_path = utils.getPath(Target_list)    
                 lists.Show_List(todo_list_path)
             except Exception :
