@@ -211,7 +211,23 @@ def Foulder_of_ToDoList_Creator ():
             
 
 #endregion    
-
+#region : in table list
+ 
+def chack_the_lists_in_table_list():
+    lists = storage.read_csv(TABLE_LIST_PATH)
+    opt_list = []
+    for lst in lists :
+        path_of_lst = lst.get('Path')
+        if os.path.exists(path_of_lst):
+            opt_list.append(lst)
+    try :
+        storage.totalwrite_csv(TABLE_LIST_PATH,FIELDS_TABLE,opt_list)
+    except Exception :
+        raise "the opt_lists is not saving in table list" 
+            
+        
+        
+    
 
 def Deadline_Creator():
     '''

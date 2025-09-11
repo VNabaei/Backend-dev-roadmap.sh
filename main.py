@@ -163,8 +163,14 @@ def main_menu():
     ----------
     None
     '''
+    #operation :
+    
     print(f"---------------- To Do List(s) in this Application ----------------\n")
-    lists.show_All_lists()
+    try : 
+        utils.chack_the_lists_in_table_list()
+        lists.show_All_lists()
+    except ValueError as a: 
+        print (f"error in showing the list {a}")
     while True:
 
         print ("\nMenu :")

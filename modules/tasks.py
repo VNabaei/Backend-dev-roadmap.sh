@@ -131,7 +131,7 @@ def add_task(file_path,todolist_id):
             "File_status" :FILE_STATUS[0]
         }
         tasks.append(task)
-    storage.write_csv(file_path,FIELDS_TASKS,tasks)
+    storage.totalwrite_csv(file_path,FIELDS_TASKS,tasks)
     print(f"task(s) saved in {file_path}{CORRECT_COLORE} successfully{RESET_COLOR}!")
     
 def null_todolist_creator(file_path):

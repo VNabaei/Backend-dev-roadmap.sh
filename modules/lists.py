@@ -446,7 +446,7 @@ def Show_List(file_path):
     '''
     if not os.path.exists(file_path):
         print(f"{file_path} does not exist.")
-        raise FileNotFoundError(f"{file_path} does not exist.")
+        # raise FileNotFoundError(f"{file_path} does not exist.")
 
     reader = storage.read_csv(file_path)
     tasks = [row for row in reader if row.get("File_status", "").lower() != FILE_STATUS[2]]
@@ -459,7 +459,7 @@ def Show_List(file_path):
         return
     print("in this To Do lists :\n")
     print(f"Progress percentage :  {utils.colored_progress_bar(Progress_percentage)}\n")
-    print(f" ---- in {status_of_list['conter']} task(s)")
+    print(f" ---- in {status_of_list['Conter']} task(s)")
     print(f"|{status_of_list['Done']} task(S) was Done \n|{status_of_list['In_progress']} task(s) in progress \n|{status_of_list['ToDo']} task(s) To Do \n|{status_of_list['Deleyed']} task(s) is deleyed \n")
     print(" ---- Task status by deadline n")
     
