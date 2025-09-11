@@ -406,7 +406,8 @@ def show_All_lists():
     
     Return(s) :
     --------
-    None
+    true : if todo list exists
+    false : if no active list was found 
     '''
      
     try :
@@ -415,7 +416,7 @@ def show_All_lists():
         active_lists = [lst for lst in lists if lst.get("file_status") != FILE_STATUS[2]]
         if not active_lists:
             print(f"{ATTENTION_COLOR}No active lists available.{RESET_COLOR}")
-            return
+            return False
         print("the title of active Lists : \n")
         for lst in active_lists:
             status_of_list =list_Status(lst.get('Path'))
@@ -427,6 +428,7 @@ def show_All_lists():
                 color = RESET_COLOR
                 
             print(f"{color} --> Title : {lst.get('Title',)} | Progress percentage : {utils.colored_progress_bar(Progress_percentage)}{RESET_COLOR}")    
+        return True
     except ValueError as error :
         print(f"{WARNING_COLOR}The operation to show the todo list failed. Error:{error}{RESET_COLOR}\n")
 

@@ -214,6 +214,8 @@ def Foulder_of_ToDoList_Creator ():
 #region : in table list
  
 def chack_the_lists_in_table_list():
+    if not os.path.exists(TABLE_LIST_PATH):
+        return
     lists = storage.read_csv(TABLE_LIST_PATH)
     opt_list = []
     for lst in lists :
@@ -225,7 +227,19 @@ def chack_the_lists_in_table_list():
     except Exception :
         raise "the opt_lists is not saving in table list" 
             
+def check_lists_exists():
+    '''
+    برای برسی صلاحیت ورود به منو ادیت
+    '''
+    if not os.path.exists(TABLE_LIST_PATH):
+        print(f"No to-do list was found for editing")
+        return False
+    # lists = storage.read_csv(TABLE_LIST_PATH)
+    # if len(lists)<=1 :
+    #     print("No to-do list was found for editing")
+    #     return False
         
+
         
     
 

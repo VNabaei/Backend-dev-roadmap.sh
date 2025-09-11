@@ -51,6 +51,9 @@ def edit_menu():
     ---------
     None
     '''
+    if not utils.check_lists_exists() :
+        print(f"{ATTENTION_COLOR}Please create a todo list first.{RESET_COLOR}")
+        return
     while True:
         print("\nEditing .........................................\n")
         print("1.Add a new task\n2.Edit a task \n3.Delete a task \n4.View all tasks"
@@ -198,13 +201,18 @@ def main_menu():
             
         elif main_choice == "3":
             print("\nShowing : .................................\n ")
-            lists.show_All_lists()
-            try :
-                Target_list= input("+what list do you want to show?\n:")
-                todo_list_path = utils.getPath(Target_list)    
-                lists.Show_List(todo_list_path)
-            except Exception :
-                print(f"{WARNING_COLOR}Something is wrong with the input variable.{RESET_COLOR}")
+            if lists.show_All_lists() :
+                try :
+                    Target_list= input("+what list do you want to show?\n:")
+                    todo_list_path = utils.getPath(Target_list)    
+                    lists.Show_List(todo_list_path)
+                except Exception :
+                    print(f"{WARNING_COLOR}Something is wrong with the input variable.{RESET_COLOR}")
+                    
+            else :
+                print(f"{ATTENTION_COLOR}please create a todo list first.{RESET_COLOR}")
+                continue
+                    
             
             
         elif main_choice == "4":
