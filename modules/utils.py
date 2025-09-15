@@ -234,11 +234,13 @@ def check_lists_exists():
     if not os.path.exists(TABLE_LIST_PATH):
         print(f"No to-do list was found for editing")
         return False
-    # lists = storage.read_csv(TABLE_LIST_PATH)
-    # if len(lists)<=1 :
-    #     print("No to-do list was found for editing")
-    #     return False
-        
+    
+    lists = storage.read_csv(TABLE_LIST_PATH) 
+    if len(lists) == 0: 
+        print("No to-do list was found for editing")
+        return False
+
+    return True  
 
         
     

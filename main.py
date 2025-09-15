@@ -57,7 +57,7 @@ def edit_menu():
     while True:
         print("\nEditing .........................................\n")
         print("1.Add a new task\n2.Edit a task \n3.Delete a task \n4.View all tasks"
-              "\n5.Delete List \n6.Update the List \n7.Back to main menu \n8.Exit")
+              "\n5.Delete List \n7.Back to main menu \n8.Exit")
         edit_choice = input("+Enter your choice: ")
         
         if edit_choice == "1":
@@ -133,9 +133,9 @@ def edit_menu():
                 print(f"{ATTENTION_COLOR}Something is wrong with the input variable. Erorr :{RESET_COLOR}")
                  
             
-        elif edit_choice == "6":
-            print("----\nUpdate the List -----------------------\n ")
-            #TODO : implement update feature later
+        # elif edit_choice == "6":
+        #     print("----\nUpdate the List -----------------------\n ")
+        #     #TODO : implement update feature later
             
         elif edit_choice == "7":
             print("\nmain menu -----------------------------\n ")
