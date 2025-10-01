@@ -10,7 +10,6 @@ def creat_list_notDone():
     pass
 def check_status():
     pass
-def generate_ID():
-    pass
+پ
 def get_user():
     pass
