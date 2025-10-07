@@ -14,19 +14,28 @@ def add_task(description,status="todo"):
     }
     storage.save_data(config.TASKS_FILE, task)
     
-    # return task
+    return task
 
-    pass
-def update_task(self,description,status):
+    
+def update_task(task,description,status):
     updated_task = {
-        "ID": self["ID"],
+        "ID": task["ID"],
         "Description": description,
         "Status": status,
-        "CreateAt": self["CreateAt"],
+        "CreateAt": task["CreateAt"],
         "UpdatedAt": datetime.datetime.now().isoformat()
     }
     storage.update_data(config.TASKS_FILE, updated_task)
 def delete_task(self):
     storage.delete_data(config.TASKS_FILE, self["ID"])
-    pass
     
+def mark(task,in_prograss = False, done = False):
+    if in_prograss:
+        new_status = "in_progreee"
+    elif done :
+        new_status = "done"
+    else :
+        print("no status provided")
+        return
+    
+    return update_task(task,status=new_status)
