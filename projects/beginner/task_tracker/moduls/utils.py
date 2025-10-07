@@ -1,17 +1,31 @@
-import json
-import os
 
-def creat_JSON_file():
-    pass
+# import os
+import storage
+
 def creat_list_done():
-    pass
+    tasks = storage.ReadFileJSON()
+    return [t for t in tasks if t["Status"] == "done"]
+
 def creat_list_inprogress():
-    pass
+    tasks =storage.ReadFileJSON()
+    return [t for t in tasks if t["Status"] == "in_progress"]
+
+
 def creat_list_notDone():
-    pass
-def check_status():
-    pass
+    tasks = storage.ReadFileJSON()
+    return [t for t in tasks if t["Status"] != "done"]
+
+
+def check_status(task_id):
+    tasks = storage.ReadFileJSON()
+    for task in tasks:
+        if task["ID"] == task_id:
+            return task["Status"]
+    return None  #if the task not found
 
 def get_user():
+    #TODO: impot the user in the key of task
     pass
 
+def find_task_by_id():
+    pass

@@ -26,8 +26,8 @@ def update_task(task,description,status):
         "UpdatedAt": datetime.datetime.now().isoformat()
     }
     storage.update_data(config.TASKS_FILE, updated_task)
-def delete_task(self):
-    storage.delete_data(config.TASKS_FILE, self["ID"])
+def delete_task(task):
+    storage.delete_data(config.TASKS_FILE, task["ID"])
     
 def mark(task,in_prograss = False, done = False):
     if in_prograss:
