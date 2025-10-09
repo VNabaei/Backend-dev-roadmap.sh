@@ -29,13 +29,13 @@ def update_task(task,description,status):
 def delete_task(task):
     storage.delete_data(config.TASKS_FILE, task["ID"])
     
-def mark(task,in_prograss = False, done = False):
-    if in_prograss:
-        new_status = "in_progreee"
+def mark(task,in_progress = False, done = False):
+    if in_progress:
+        new_status = "in_progress"
     elif done :
         new_status = "done"
     else :
-        print("no status provided")
-        return
+         print("No status flag provided. Use --in_progress or --done.")        
+         return
     
-    return update_task(task,status=new_status)
+    return update_task(task,description=task["Description"],status=new_status)

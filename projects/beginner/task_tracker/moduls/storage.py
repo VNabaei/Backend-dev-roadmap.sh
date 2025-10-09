@@ -1,6 +1,7 @@
 import json
 from config import TASKS_FILE
 #TODO: writer error handeler
+#NOTE : the address was defide, if the path changed, change the code!!!
 
 def WriteFileJSON(input_data) :
     """
