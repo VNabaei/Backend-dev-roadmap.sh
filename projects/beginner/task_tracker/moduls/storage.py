@@ -1,28 +1,50 @@
 import json
-from config import TASKS_FILE
+import os
+from config import TASKS_DIR,TASKS_FILE
+
 #TODO: writer error handeler
 #NOTE : the address was defide, if the path changed, change the code!!!
 
+
+# FIX IT :
+# def init_storage(task_path):
+#     global TASKS_FILE 
+#     TASKS_FILE = task_path
+# TASKS_FILE = 
+
+
+# در ابتدای هر ماژول
+if __name__ == "__main__":
+    
+    raise RuntimeError("run the main program")
+
+# pass path :
+   
 def WriteFileJSON(input_data) :
     """
     write the file in json format
     
-    parametr(s) : 
+    parameter(s) : 
     ---------
     input_data : dic
     
     return(s) : 
     -------
     None
+    
     """
-    with open (TASKS_FILE,"w",enconding="utf-8") as f:
-        json.dump(input_data , f, ensure_ascii=False,indent=4)  
-                         
+    try : 
+        with open (TASKS_FILE,"w",encoding="utf-8") as f:
+            json.dump(input_data , f, ensure_ascii=False,indent=4)  
+        print(" task was creat successfull")
+    except ValueError as e :
+        raise  e
+                     
 def ReadFileJSON ():
     """
     read the file and return to list format
     
-    parametr(s):
+    parameter(s):
     -----------
     None
     
@@ -30,6 +52,11 @@ def ReadFileJSON ():
     ---------
     data : list
     """
+    if not os.path.exists(TASKS_FILE):
+        # print("no tasks was found")
+        return []
+      
+    
     with open (TASKS_FILE,"r") as f : 
         data =json.load(f)
         return data
@@ -40,7 +67,7 @@ def get_next_id():
     """
     this function read the file and find the last id in tasks, return the next id to use in creat task
     
-    parametr(s):
+    parameter(s):
     -----------
     None
     
@@ -60,7 +87,7 @@ def save_data(task):
     """
     this function saving the current task in file
     
-    parametr(s):
+    parameter(s):
     -----------
     task : dic|
         the task was input
@@ -79,7 +106,7 @@ def update_data(updated_task):
     """
     this fonction save the updated task in file
     
-    parametr(s):
+    parameter(s):
     -----------
     updated_task: dic|
         the updated task
@@ -91,17 +118,23 @@ def update_data(updated_task):
     
     """
     data = ReadFileJSON()
-    for index, item in enumerate(data):
-        if item["ID"] == updated_task["ID"]:
-            data[index] = updated_task
-            break
-    WriteFileJSON(data)
+    if data != [] :
+        
+        for index, item in enumerate(data):
+            if item["ID"] == updated_task["ID"]:
+                data[index] = updated_task
+                break
+            else :
+                print ("the task wasn't found")
+        WriteFileJSON(data)
+    else :
+        print("no tasks was found")
     
 def delete_data(task_id):
     """
     delete the chosen task in file
     
-    parametr(s):
+    parameter(s):
     --------
     task_id : str|
         the id of chosen task
@@ -112,7 +145,7 @@ def delete_data(task_id):
     """
     
     data = ReadFileJSON()
-    data = [item for item in data if item["ID"] != task_id] 
+    data = [item for item in data if item["ID"] != int(task_id)] 
     WriteFileJSON(data)              
     
     

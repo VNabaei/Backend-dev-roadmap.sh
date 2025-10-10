@@ -2,9 +2,10 @@
 import storage
 import config
 import datetime
+from config import TASKS_FILE
 
 def add_task(description,status="todo"):
-    task_id = storage.get_next_id(config.TASKS_FILE)
+    task_id = storage.get_next_id()
     task = {
         "ID": task_id,
         "Description": description,
@@ -12,7 +13,7 @@ def add_task(description,status="todo"):
         "CreateAt": datetime.datetime.now().isoformat(),
         "UpdatedAt": None
     }
-    storage.save_data(config.TASKS_FILE, task)
+    storage.save_data(task)
     
     return task
 
@@ -25,9 +26,9 @@ def update_task(task,description,status):
         "CreateAt": task["CreateAt"],
         "UpdatedAt": datetime.datetime.now().isoformat()
     }
-    storage.update_data(config.TASKS_FILE, updated_task)
+    storage.update_data(updated_task)
 def delete_task(task):
-    storage.delete_data(config.TASKS_FILE, task["ID"])
+    storage.delete_data(task["ID"])
     
 def mark(task,in_progress = False, done = False):
     if in_progress:

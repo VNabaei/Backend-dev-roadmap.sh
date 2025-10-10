@@ -1,6 +1,12 @@
 import argparse
-import projects.beginner.task_tracker.moduls.tasks as tasks
+import tasks
 import utils
+import sys
+
+if __name__ == "__main__":
+    raise RuntimeError("Run the main program (main.py), not cli.py directly")
+
+
 #description of commands
 desc_prog = "This program creat the To Do List to JSON format"
 desc_add_task = "Use this command to creat a task, by writing the name of task"
@@ -30,42 +36,42 @@ delete_parser.add_argument("task_id",type=int,help="the task index that be delet
 #mark
 mark_parser = subparser.add_parser("mark",description=desc_mark)
 mark_parser.add_argument("task_index",type=int,help = "the task index that changing")
-mark_parser.add_argument("--in_progress",action= "store_True",help = "Mark as in progress")
-mark_parser.add_argument("--done",action="store_True",help="Mark as done")
+mark_parser.add_argument("--in_progress",action= "store_true",help = "Mark as in progress")
+mark_parser.add_argument("--done",action="store_true",help="Mark as done")
 
 # list
 list_parser =  subparser.add_parser("list",description=desc_list)
 list_parser.add_argument("--task_status", type=str,help= "status the tasks that you want to list it")
 
-#arguments
-args = parser.parse_args()
-
-#endregion
 
 #region : help description
 
 def show_help():
     print("""
-          Task Tracker  
+          add tasks : add <name of task>
+          update  
           """)
 
 #endregion
 
 #region : call the function
 def main():
-    if args.command == "add":
-        tasks.add_task(args.task_name)
-    elif args.command == "update":
-        task = utils.find_task_by_id(args.task_id)
-        tasks.update_task(task,description = args.new_name,statue = task["Status"])
+     
+            args = parser.parse_args(sys.argv[1:])
+            if args.command == "add":
+                tasks.add_task(args.task_name)
+            elif args.command == "update":
+                task = utils.find_task_by_id(args.task_id)
+                tasks.update_task(task,description = args.new_name,statue = task["Status"])
         
-    elif args.command == "delete": # cheched!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        tasks.delete_task(args.task_id)
+            elif args.command == "delete": # cheched!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                tasks.delete_task(args.task_id)
         
-    elif args.command == "mark":
-        tasks.mark(args.task_id,in_progress=args.in_progress,done = args.done)
-    elif args.command == "list":
-        print (utils.creat_list(args.task_status))
-    else :
-        show_help()
-        
+            elif args.command == "mark":
+                tasks.mark(args.task_id,in_progress=args.in_progress,done = args.done)
+            elif args.command == "list":
+                print (utils.creat_list(args.task_status))
+            else :
+                show_help()
+ 
+
